@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Books Table</title>
+</head>
+<body>
+
+  <h1>Books</h1>
+
+  <table border="1" id="books">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Created At</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>ISBN</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Supabase data -->
+    </tbody>
+  </table>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+  const supabaseUrl = "https://fcfvpvsciuyrlogbptdg.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjZnZwdnNjaXV5cmxvZ2JwdGRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxNjYwMjEsImV4cCI6MjA4Nzc0MjAyMX0.haXGrdYVqJEtNARbeJgGsNRM5R6bYHpKUv7z67-dwxQ";
+
+  const supabaseClient = window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+  );
+
+  async function getBooks() {
+    const { data, error } = await supabaseClient
+      .from('books')
+      .select('*')
+      .order('id', { ascending: true });
+
+    const tableBody = document.querySelector("#books tbody");
+
+    data.forEach(book => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${book.id}</td>
+        <td>${new Date(book.created_at).toLocaleString()}</td>
+        <td>${book.title}</td>
+        <td>${book.author}</td>
+        <td>${book.ISBN}</td>
+      `;
+
+      tableBody.appendChild(row);
+    });
+  }
+
+  getBooks();
+</script>
+
+</body>
+</html>
